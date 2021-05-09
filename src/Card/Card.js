@@ -3,23 +3,16 @@ import "./Card.css";
 class Card extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      faceUp: false,
-    };
-  }
-  flipOver() {
-    this.setState({ faceUp: !this.state.faceUp });
-    console.log("flipped");
   }
   render() {
     let content;
-    if(this.state.faceUp){
+    if (this.props.faceUp) {
       content = this.props.content;
-    }else{
-      content = 'back';
+    } else {
+      content = "";
     }
     return (
-      <div className="Card" onClick={this.flipOver.bind(this)}>
+      <div className={`Card ${this.props.faceUp ? "face-up" : ""}`} onClick={this.props.flipOver}>
         {content}
       </div>
     );

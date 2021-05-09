@@ -1,0 +1,18 @@
+.Deck{
+  display: inline-grid;
+  align-items: center;
+  text-align: center;
+  grid-template-columns: auto auto auto auto;
+}
+.Deck[disabled] {
+  pointer-events: none;
+  filter: gray;
+  -webkit-filter: grayscale(100%);
+  -moz-filter: grayscale(100%);
+  filter: saturate(3);
+}
+.Container{
+  display: inline-grid;
+  align-items: center;
+  text-align: center;
+}
