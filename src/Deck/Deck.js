@@ -5,8 +5,9 @@ import "./Deck.css";
 import AlertSnackBar from "./components/AlertSnackbar";
 import AlertDialog from "./components/AlertDialog";
 
-const Completionist = () => <span>You are good to go!</span>;
+const Completionist = () => <span>Süreniz Bitti!</span>;
 var isTimerComplete = false;
+let time = null;
 // Renderer callback with condition
 const renderer = ({ hours, minutes, seconds, completed }) => {
   isTimerComplete = completed;
@@ -15,6 +16,7 @@ const renderer = ({ hours, minutes, seconds, completed }) => {
     return <Completionist />;
   } else {
     // Render a countdown
+    time = zeroPad(hours) + ":" + zeroPad(minutes) + ":" + zeroPad(seconds);
     return (
       <span>
         {zeroPad(hours)}:{zeroPad(minutes)}:{zeroPad(seconds)}
@@ -41,10 +43,12 @@ class Deck extends React.Component {
       deck: deck,
       firstCard: null,
       divDisable: false,
-      date: Date.now() + 10000,
+      date: Date.now() + 180000,
       deckMatchSize: size,
       matchedSize: 0,
       gameOver: null,
+      point: 0,
+      gameOverTime: 0,
     };
   }
 
@@ -63,6 +67,12 @@ class Deck extends React.Component {
       matchedTemp: false,
       unMatchedTemp: false,
     });
+    this.isGameOver();
+  }
+
+  setPoint(point) {
+    let tempPoint = point * this.state.matchedSize;
+    this.setState({ point: tempPoint });
   }
   flipOver(cardIndex) {
     if (this.state.firstCard === null) {
@@ -79,6 +89,7 @@ class Deck extends React.Component {
             matchedTemp: true,
             matchedSize: this.state.matchedSize + 1,
           });
+          this.setPoint(100);
         }, 500);
       } else {
         setTimeout(() => {
@@ -91,10 +102,9 @@ class Deck extends React.Component {
     this.isGameOver();
     this.wrongMatch(cardIndex);
   }
-
-  async isGameOver() {
+  isGameOver(time) {
     if (isTimerComplete || this.state.deckMatchSize === this.state.matchedSize) {
-      this.setState({ deck: null, gameOver: true });
+      this.setState({ deck: null, gameOver: true, gameOverTime: time });
     }
   }
 
@@ -102,30 +112,39 @@ class Deck extends React.Component {
     return (
       <div className="Container">
         {!(this.state.gameOver === true) ? (
-          <div className="Deck" disabled={this.state.divDisable}>
-            {this.state.deck.map((i, index) => {
-              return (
-                <Card
-                  content={i.content}
-                  faceUp={i.faceUp}
-                  flipOver={() => {
-                    this.flipOver(index);
-                  }}
-                />
-              );
-            })}
-          </div>
+          <>
+            <div className="Deck" disabled={this.state.divDisable}>
+              {this.state.deck.map((i, index) => {
+                return (
+                  <Card
+                    content={i.content}
+                    faceUp={i.faceUp}
+                    flipOver={() => {
+                      this.flipOver(index);
+                    }}
+                  />
+                );
+              })}
+              {this.isGameOver(time)}
+              {console.log(time)}
+            </div>
+            <Countdown date={this.state.date} renderer={renderer} />
+          </>
         ) : (
-          ""
+          <div>
+            <span>BİTTİ!</span>
+            <br></br>
+            <span>Tamamlama Zamanı: {this.state.gameOverTime}</span>
+          </div>
         )}
-        <Countdown date={this.state.date} renderer={renderer} />
         {this.state.matchedTemp ? <AlertSnackBar openSnack={true} text={"Doğru :)"} severity={"success"} /> : ""}
         {this.state.unMatchedTemp ? <AlertSnackBar openSnack={true} text={"Yanlış :("} severity={"warning"} /> : ""}
         {this.state.gameOver ? <AlertSnackBar openSnack={true} text={"Oyun Bitti"} severity={"success"} /> : ""}
-        <AlertDialog title="deneme" description="deneme" />
+        <AlertDialog title="Baştan Başla!" description="Yeniden başlamak istediğinize emin misiniz?" />
         <span>
           Eşleşme Sayısı: {this.state.matchedSize ?? 0} / {this.state.deckMatchSize}
         </span>
+        <span>Puan : {this.state.point}</span>
       </div>
     );
   }
