@@ -27,24 +27,48 @@ const renderer = ({ hours, minutes, seconds, completed }) => {
 class Deck extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props);
-    const items = ["🥸", "😎", "🤪", "😍"];
-    const deck = items
-      .concat(items)
-      .sort(() => Math.random() - 0.5)
-      .map((i) => {
-        return {
-          content: i,
-          faceUp: false,
-        };
-      });
     const size = this.props.levelCount;
+    const Level1Items = ["🥸", "😎", "🤪", "😍"];
+    const Level2Items = ["🌸", "🍀", "🌻", "🌹", "🌷", "🌼"];
+    const Level3Items = ["🍋", "🍊", "🍉", "🍎", "🍒", "🥥", "🌶️", "🥕"];
+    let deck = null;
+    if(size === 1){
+      deck = Level1Items
+      .concat(Level1Items)
+        .sort(() => Math.random() - 0.5)
+        .map((i) => {
+          return {
+            content: i,
+            faceUp: false,
+          };
+        });
+    }else if(size === 2){
+      deck = Level2Items
+      .concat(Level2Items)
+        .sort(() => Math.random() - 0.5)
+        .map((i) => {
+          return {
+            content: i,
+            faceUp: false,
+          };
+        });
+    } else {
+      deck = Level3Items
+      .concat(Level3Items)
+        .sort(() => Math.random() - 0.5)
+        .map((i) => {
+          return {
+            content: i,
+            faceUp: false,
+          };
+        });
+    }
     this.state = {
-      deck: deck,
+      deck: deck ?? null,
       firstCard: null,
       divDisable: false,
       date: Date.now() + 180000,
-      deckMatchSize: size,
+      deckMatchSize: deck.length/2,
       matchedSize: 0,
       gameOver: null,
       point: 0,
