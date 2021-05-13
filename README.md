@@ -51,6 +51,8 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/c
 
 ### Analyzing the Bundle Size
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/ad5b2fc0-fbcd-48d3-b1b4-81ea8fdcf323/deploy-status)](https://app.netlify.com/sites/matcher-memory-game/deploys)
+
 This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
 ### Making a Progressive Web App
