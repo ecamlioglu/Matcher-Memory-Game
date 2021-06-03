@@ -9,6 +9,9 @@
     margin: 5px;
     float: left;
     transition: transform 0.9s;
+    font-size: 8rem;
+    text-align: center;
+    align-items: center;
 }
 
 .Card.face-up {
